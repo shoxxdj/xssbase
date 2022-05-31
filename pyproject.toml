@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "xssbase"
+version = "0.1.0"
+description = "a base tool to exploit xss with ease"
+authors = ["shoxxdj <shoxx@shoxxdj.fr>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pyngrok = "^5.1.0"
+CherryPy = "^18.6.1"
+simple-chalk = "^0.1.0"
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.scripts]
+xssbase="xssbase.xssbase:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
