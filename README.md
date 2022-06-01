@@ -15,6 +15,7 @@ webserver start <port>
 ```
 ### Expose : 
 #### Ngrok : 
+
 ````
 expose ngork <port of local webserver> 
 ```
@@ -23,6 +24,7 @@ expose ngork <port of local webserver>
 ```
 payload
 ```
+
 #### Exemple : 
 ```
 payload generic exposed 
@@ -31,6 +33,7 @@ Will return a generic xss payload with exposed url inside
 ```
 payload firebase exposed minified
 ```
+
 Will return a payload to trigg an xss in firebase with exposed url and minified version. 
 
 ## What's comming next ? 
