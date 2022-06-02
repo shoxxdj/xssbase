@@ -4,13 +4,20 @@ import xssbase.lib.var as var
 
 def router(args):
     args=args.split()
+    listenPort=0
     if(len(args)>1):
         if(args[0]=='start'):
-            print('tutu')
-            start(int(args[1]))
-            var.var_webserverLocalPort=int(args[1])
-            var.var_webserverStarted=True
-            return 
+            listenPort=int(args[1])
+        else:
+            #Try to find a valid port from list
+            #check if available first
+            listenPort=8080
+
+        start(listenPort)
+        var.var_webserverLocalPort=listenPort
+        var.var_webserverStarted=True
+        print("GET IP")
+        var.var_localServices.append("http://127.0.0.1"+":"+str(listenPort)+"/") 
 
 
 class GetPostMethods(object):
